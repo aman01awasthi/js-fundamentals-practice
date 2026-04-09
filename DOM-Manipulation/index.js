@@ -11,34 +11,69 @@
 // Validation — empty name = red error, no @ in email = red error
 // Dark mode toggle — pure JS, no libraries
 // Dynamic cards — 5 cards from array of objects, each with a delete button
+let data = [];
+
+//User clicks on submit then newData will be pushed to data
+// -> validateForm validate inputs
+// -> data will be stored in local storage
+function handleSubmit() {
+  let newData = {
+    id: Date.now(),
+    name: nam,
+    email: mail,
+  };
+  data.push(newData);
+  validateForm();
+  saveData();
+}
 
 function validateForm(nam, mail) {
-    let nameValidate = () => {
-      // if name is not there then show error
-      if (!nam.trim()) {
-        return false;
-        // return "Please Enter your name";
-      }
-      // else return name
-      return nam.trim();
-    };
-    
-    let emailValidate = () => {
-        if (!mail.trim() || !mail.includes("@")) {
-            return false;
-            // return "Please enter correct email";
-        }
-      return mail;
-    };
-    let nameResult = nameValidate();
-    let emailResult = emailValidate();
-    return {
-        id: Date.now(),
-        name: nameResult,
-        email: emailResult,
+  let nameValidate = () => {
+    // if name is not there then show error
+    if (!nam.trim()) {
+      return false;
     }
-  // called function so that we can access function outside
+    // else return name
+    return nam.trim();
+  };
+
+  let emailValidate = () => {
+    if (!mail.trim() || !mail.includes("@")) {
+      return false;
+    }
+    return mail;
+  };
+
+  let nameResult = nameValidate();
+  let emailResult = emailValidate();
+
+  if (nameResult === false) {
+    return "Please Enter your name";
+  }
+
+  if (emailResult === false) {
+    return "Please check your email";
+  }
+
+  let validData = {
+    id: Date.now(),
+    name: nameResult,
+    email: emailResult,
+  };
+
+  return validData;
 }
 // validateForm("Aman");
-let isValid = validateForm("  ", "aman@gmail.com");
+let isValid = validateForm("   ", " ");
+let isNameValid = validateForm("   ", "aman@gmail.com");
+let isEmailValid = validateForm(" Aman  ", " ");
+let bothValid = validateForm("Aman", "aman@gmail.com");
 console.log(isValid);
+console.log(isNameValid);
+console.log(isEmailValid);
+console.log(bothValid);
+
+//  saveData will store received data in localStorage
+function saveData() {
+  localStorage.setItem("data", JSON.stringify(data));
+}
