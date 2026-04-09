@@ -11,34 +11,103 @@
 // Validation — empty name = red error, no @ in email = red error
 // Dark mode toggle — pure JS, no libraries
 // Dynamic cards — 5 cards from array of objects, each with a delete button
+let data = loadData();
+renderData();
+//User clicks on submit then newData will be pushed to data
+// -> validateForm validate inputs
+// -> data will be stored in local storage
+function handleSubmit(nam, mail) {
+  let result = validateForm(nam, mail);
+  if (typeof result === 'object'){
+    data.push(result);
+    saveData();
+    renderData();
+  } else{
+    return false;
+  }
+}
 
 function validateForm(nam, mail) {
-    let nameValidate = () => {
-      // if name is not there then show error
-      if (!nam.trim()) {
-        return false;
-        // return "Please Enter your name";
-      }
-      // else return name
-      return nam.trim();
-    };
-    
-    let emailValidate = () => {
-        if (!mail.trim() || !mail.includes("@")) {
-            return false;
-            // return "Please enter correct email";
-        }
-      return mail;
-    };
-    let nameResult = nameValidate();
-    let emailResult = emailValidate();
-    return {
-        id: Date.now(),
-        name: nameResult,
-        email: emailResult,
+  let nameValidate = () => {
+    // if name is not there then show error
+    if (!nam.trim()) {
+      return false;
     }
-  // called function so that we can access function outside
+    // else return name
+    return nam.trim();
+  };
+
+  let emailValidate = () => {
+    if (!mail.trim() || !mail.includes("@")) {
+      return false;
+    }
+    return mail;
+  };
+
+  let nameResult = nameValidate();
+  let emailResult = emailValidate();
+
+  if (nameResult === false) {
+    return "Please Enter your name";
+  }
+
+  if (emailResult === false) {
+    return "Please check your email";
+  }
+
+  let validData = {
+    id: Date.now(),
+    name: nameResult,
+    email: emailResult,
+  };
+
+  return validData;
 }
-// validateForm("Aman");
-let isValid = validateForm("  ", "aman@gmail.com");
-console.log(isValid);
+// let isValid = validateForm("Aman ", "aman@gmail.com");
+
+//  saveData will store received data in localStorage
+function saveData() {
+  localStorage.setItem("data", JSON.stringify(data));
+}
+
+function loadData(){
+  let storedData = localStorage.getItem("data");
+
+  if(storedData){
+    return JSON.parse(storedData);
+  } else{
+    return [];
+  }
+}
+
+document.getElementById('formData').addEventListener('submit', ()=>{
+  event.preventDefault();
+
+  let userName = document.getElementById('name');
+  let nameVal = userName.value.trim();
+  let userEmail = document.getElementById('email');
+  let emailVal = userEmail.value.trim();
+
+  if(nameVal === "" || emailVal === "") return;
+
+  handleSubmit(nameVal, emailVal);
+  userName.value = "";
+  userEmail.value = "";
+})
+
+//renderData function
+//here we will display the data  in HTMl after getting it from localStorage
+//here we will access single user with the help of foreach
+//then we will create li to display that data
+
+function renderData(){
+  let displayData = document.getElementById('container');
+  displayData.textContent= "";
+
+  data.forEach(user => {
+    let li = document.createElement('li');
+    li.textContent = `${user.name} - ${user.email}`;
+
+    displayData.appendChild(li);
+  });
+}
