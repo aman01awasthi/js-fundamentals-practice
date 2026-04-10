@@ -13,16 +13,29 @@
 // Dynamic cards — 5 cards from array of objects, each with a delete button
 let data = loadData();
 renderData();
+
 //User clicks on submit then newData will be pushed to data
 // -> validateForm validate inputs
 // -> data will be stored in local storage
 function handleSubmit(nam, mail) {
   let result = validateForm(nam, mail);
-  if (typeof result === 'object'){
+  let nameErr = document.getElementById("nameError");
+  let emailErr = document.getElementById("emailError");
+  if (typeof result === "object") {
+    nameErr.textContent = "";
+    emailErr.textContent = "";
     data.push(result);
     saveData();
     renderData();
-  } else{
+    return true;
+  } else {
+    if (result === "Please Enter your name") {
+      nameErr.textContent = result;
+    }
+
+    if (result === "Please check your email") {
+      emailErr.textContent = result;
+    }
     return false;
   }
 }
@@ -70,42 +83,43 @@ function saveData() {
   localStorage.setItem("data", JSON.stringify(data));
 }
 
-function loadData(){
+function loadData() {
   let storedData = localStorage.getItem("data");
 
-  if(storedData){
+  if (storedData) {
     return JSON.parse(storedData);
-  } else{
+  } else {
     return [];
   }
 }
 
-document.getElementById('formData').addEventListener('submit', ()=>{
+document.getElementById("formData").addEventListener("submit", () => {
   event.preventDefault();
 
-  let userName = document.getElementById('name');
+  let userName = document.getElementById("name");
   let nameVal = userName.value.trim();
-  let userEmail = document.getElementById('email');
+  let userEmail = document.getElementById("email");
   let emailVal = userEmail.value.trim();
 
-  if(nameVal === "" || emailVal === "") return;
 
-  handleSubmit(nameVal, emailVal);
-  userName.value = "";
-  userEmail.value = "";
-})
+  let clearInput = handleSubmit(nameVal, emailVal);
+  if(clearInput === true){
+    userName.value = "";
+    userEmail.value = "";
+  }
+});
 
 //renderData function
 //here we will display the data  in HTMl after getting it from localStorage
 //here we will access single user with the help of foreach
 //then we will create li to display that data
 
-function renderData(){
-  let displayData = document.getElementById('container');
-  displayData.textContent= "";
+function renderData() {
+  let displayData = document.getElementById("container");
+  displayData.textContent = "";
 
-  data.forEach(user => {
-    let li = document.createElement('li');
+  data.forEach((user) => {
+    let li = document.createElement("li");
     li.textContent = `${user.name} - ${user.email}`;
 
     displayData.appendChild(li);

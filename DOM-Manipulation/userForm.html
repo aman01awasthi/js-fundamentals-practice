@@ -10,9 +10,7 @@
 
     <style>
         body {
-            background: #f8f9fa;
             font-family: system-ui, -apple-system, sans-serif;
-            padding: 40px 15px;
         }
 
         .toggleBtn {
@@ -28,7 +26,6 @@
             max-width: 450px;
             margin: auto;
             padding: 25px;
-            background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
@@ -68,11 +65,18 @@
         }
 
         #container li {
-            background: #ffffff;
+            /* background: #ffffff; */
             padding: 12px 15px;
             margin-bottom: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        #nameError, #emailError{
+            color: red;
+            margin: 0px;
+        }
+        .form-control{
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -80,7 +84,7 @@
 <body>
 
     <div class="toggleBtn">
-        <button class="btn btn-outline-dark" id="toggleColor">Toggle</button>
+        <button class="btn btn-outline-success" id="toggleColor">Toggle</button>
     </div>
 
     <form id="formData">
