@@ -14,6 +14,11 @@
 let data = loadData();
 renderData();
 
+let theme = localStorage.getItem('theme');
+if(theme === 'dark'){
+  document.body.classList.add('dark-mode');
+}
+
 //User clicks on submit then newData will be pushed to data
 // -> validateForm validate inputs
 // -> data will be stored in local storage
@@ -125,3 +130,11 @@ function renderData() {
     displayData.appendChild(li);
   });
 }
+
+document.getElementById('toggleColor').addEventListener('click', () => {
+  if(document.body.classList.toggle('dark-mode')){
+    localStorage.setItem('theme', 'dark');
+  } else{
+    localStorage.setItem('theme', 'light');
+  }
+})
