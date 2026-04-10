@@ -119,7 +119,7 @@ document.getElementById("formData").addEventListener("submit", () => {
 //here we will access single user with the help of foreach
 //then we will create li to display that data
 
-function renderData() {
+function renderData(container) {
   let displayData = document.getElementById("container");
   displayData.textContent = "";
 
@@ -127,7 +127,16 @@ function renderData() {
     let li = document.createElement("li");
     li.textContent = `${user.name} - ${user.email}`;
 
+    let delBtn = document.createElement("button");
+    delBtn.classList.add('btn');
+    delBtn.classList.add('btn-outline-danger');
+    delBtn.textContent = "x";
+    delBtn.addEventListener('click', () => {
+      deleteData(user.id);
+    })
+
     displayData.appendChild(li);
+    li.appendChild(delBtn);
   });
 }
 
@@ -138,3 +147,12 @@ document.getElementById('toggleColor').addEventListener('click', () => {
     localStorage.setItem('theme', 'light');
   }
 })
+
+//remove data from data array whose id doesn't matches
+// on behalf of id - will remove the data
+function deleteData(id){
+  // here by filtering data to newData whose doesn't matches in data - will remove that particular data
+  data = data.filter(user => id !== user.id);
+  saveData();
+  renderData();
+}
